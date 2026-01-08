@@ -41,5 +41,45 @@ public class SudokuService {
         }
 
     }
+    private boolean validatorValue(Integer value, int row, int column, Board board) {
+        return !existsLine(row, value, board)
+                && !existsColumn(column, value, board)
+                && !existsSection(value, row, column, board);
+    }
+
+    private boolean existsLine(Integer value, int row, Board board) {
+        for (int col = 0; col < 9; col++) {
+            Integer v = board.getPosition(row, col).getValue();
+            if (v != null && v.equals(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean existsColumn(Integer value,int column, Board board) {
+        for (int lin = 0; lin < 9; lin++) {
+            Integer v = board.getPosition(lin, column).getValue();
+            if (v != null && v.equals(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean existsSection(Integer value, int row, int column, Board board) {
+        int beginningRow = (row / 3) * 3;
+        int beginningColumn = (column / 3) * 3;
+
+        for (int i = beginningRow; i < beginningRow + 3; i++) {
+            for (int j = beginningColumn; j < beginningColumn + 3; j++) {
+                Integer v = board.getPosition(i, j).getValue();
+                if (v != null && v.equals(value)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }
