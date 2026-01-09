@@ -8,12 +8,22 @@ public class Position {
     private final int colunm;
     private Integer value;
     private boolean fixedNumber;
+    private boolean hasError;
 
     public Position(int row, int colunm, Integer value, boolean fixedNumber) {
         this.row = row;
         this.colunm = colunm;
         this.value = value;
         this.fixedNumber = fixedNumber;
+        this.hasError = false;
+    }
+
+    public Position(int row, int colunm) {
+        this.row = row;
+        this.colunm = colunm;
+        this.value = null;
+        this.fixedNumber = false;
+        this.hasError = false;
     }
 
     public int getRow() {
@@ -38,6 +48,14 @@ public class Position {
 
     public void setFixedNumber(boolean fixedNumber) {
         this.fixedNumber = fixedNumber;
+    }
+
+    public boolean isHasError() {
+        return hasError;
+    }
+
+    public void setHasError(boolean hasError) {
+        this.hasError = hasError;
     }
 
     @Override

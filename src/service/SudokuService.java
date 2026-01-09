@@ -18,6 +18,7 @@ public class SudokuService {
             throw new IllegalStateException("It is not possible to change a fixed position");
         }
         position.setValue(number);
+        position.setHasError(validatorValue(number, row , column, board));
     }
     public void removeNumber(int row, int column, Board board){
 
@@ -29,25 +30,25 @@ public class SudokuService {
         position.setValue(null);
     }
 
-    private void validateRanges(int row, int column, Board board) {
+    public void validateRanges(int row, int column, Board board) {
 
         if (row < 0 || column < 0 || row > board.getGridValue() || column > board.getGridValue()){
             throw new IndexOutOfBoundsException("Row or column outside the range");
         }
     }
-    private void validateValue(Integer number, Board board) {
+    public void validateValue(Integer number, Board board) {
         if (number < 1 || number > board.getGridValue()){
             throw new IllegalArgumentException("The value must be between 1 and " + board.getGridValue());
         }
 
     }
-    private boolean validatorValue(Integer value, int row, int column, Board board) {
+    public boolean validatorValue(Integer value, int row, int column, Board board) {
         return !existsLine(row, value, board)
                 && !existsColumn(column, value, board)
                 && !existsSection(value, row, column, board);
     }
 
-    private boolean existsLine(Integer value, int row, Board board) {
+    public boolean existsLine(Integer value, int row, Board board) {
         for (int col = 0; col < 9; col++) {
             Integer v = board.getPosition(row, col).getValue();
             if (v != null && v.equals(value)) {
@@ -57,7 +58,7 @@ public class SudokuService {
         return false;
     }
 
-    private boolean existsColumn(Integer value,int column, Board board) {
+    public boolean existsColumn(Integer value,int column, Board board) {
         for (int lin = 0; lin < 9; lin++) {
             Integer v = board.getPosition(lin, column).getValue();
             if (v != null && v.equals(value)) {
@@ -67,7 +68,7 @@ public class SudokuService {
         return false;
     }
 
-    private boolean existsSection(Integer value, int row, int column, Board board) {
+    public boolean existsSection(Integer value, int row, int column, Board board) {
         int beginningRow = (row / 3) * 3;
         int beginningColumn = (column / 3) * 3;
 

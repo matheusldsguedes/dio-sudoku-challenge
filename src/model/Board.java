@@ -1,7 +1,7 @@
 package model;
 
 public class Board {
-    private final Position[][] grid;
+    private Position[][] grid;
     private final int gridValue;
 
     public Board(int gridValue) {
@@ -11,6 +11,10 @@ public class Board {
 
     public int getGridValue() {
         return gridValue;
+    }
+
+    public void setPosition(int row,  int column, Position position) {
+        grid[row][column] = position;
     }
 
     public Position getPosition(int row, int column){
