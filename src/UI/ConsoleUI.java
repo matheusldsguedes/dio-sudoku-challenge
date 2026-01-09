@@ -41,8 +41,8 @@ public class ConsoleUI {
     }
 
     private void inserirNumero() {
-        int row = readInt("On which line do you want to insert it? (1 a 9)");
-        int column = readInt("In which column do you want to insert it? (1 a 9)");
+        int row = readInt("On which line do you want to insert it? (1 a 9)")-1;
+        int column = readInt("In which column do you want to insert it? (1 a 9)")-1;
         int value = readInt("What value do you want to enter? (1 a 9)");
 
 
@@ -51,8 +51,8 @@ public class ConsoleUI {
     }
 
     private void removerNumero() {
-        int row = readInt("Which line do you want to remove it from?");
-        int column = readInt("Which column do you want to remove it from?");
+        int row = readInt("Which line do you want to remove it from? (1 a 9)")-1;
+        int column = readInt("Which column do you want to remove it from? (1 a 9)")-1;
 
         try {
             service.removeNumber(row, column, board);
@@ -85,21 +85,36 @@ public class ConsoleUI {
     private void printBoard() {
 
         System.out.println();
+        System.out.print("    ");
+        for (int col = 1; col <= 9; col++) {
+            System.out.print(col + " ");
+            if (col % 3 == 0 && col != 9) {
+                System.out.print("  ");
+            }
+        }
+        System.out.println();
+
         for (int i = 0; i < 9; i++) {
             if (i % 3 == 0) {
-                System.out.println("+-------+-------+-------+");
+                System.out.println("  +-------+-------+-------+");
             }
+            System.out.print((i + 1) + " | ");
+
             for (int j = 0; j < 9; j++) {
-                if (j % 3 == 0) System.out.print("| ");
 
                 Position p = board.getPosition(i, j);
                 String value = (p.getValue() == null) ? "." : p.getValue().toString();
                 System.out.print(value + " ");
+
+                if ((j + 1) % 3 == 0 && j != 8) {
+                    System.out.print("| ");
+                }
             }
             System.out.println("|");
         }
-        System.out.println("+-------+-------+-------+");
+        System.out.println("  +-------+-------+-------+");
     }
+
 
     private void loadGame() {
         try {
