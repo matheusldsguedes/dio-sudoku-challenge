@@ -13,6 +13,13 @@ import java.util.Scanner;
 
 public class ConsoleUI {
 
+    private static final String RESET  = "\u001B[0m";
+    private static final String WHITE  = "\u001B[37m";
+    private static final String BLUE   = "\u001B[34m";
+    private static final String RED    = "\u001B[31m";
+    private static final String GREEN  = "\u001B[32m";
+
+
     public ConsoleUI(Sudoku sudoku) {
         this.board = sudoku.getBoard();
     }
@@ -123,16 +130,14 @@ public class ConsoleUI {
             System.out.printf("%3d |", row + 1);
 
             for (int col = 0; col < size; col++) {
-
                 Position p = board.getPosition(row, col);
-                String value = (p.getValue() == null) ? "." : p.getValue().toString();
-
-                System.out.printf("%" + cellWidth + "s", value);
+                System.out.print(formatCell(p, cellWidth));
 
                 if ((col + 1) % section == 0) {
                     System.out.print("|");
                 }
             }
+
             System.out.println();
 
             if ((row + 1) % section == 0) {
@@ -140,6 +145,7 @@ public class ConsoleUI {
             }
         }
     }
+
 
     private void printHorizontalSeparator(int size, int section, int cellWidth) {
 
@@ -153,6 +159,28 @@ public class ConsoleUI {
         }
         System.out.println();
     }
+
+    private String formatCell(Position p, int cellWidth) {
+        String color;
+        String value;
+
+        if (p.getValue() == null) {
+            value = ".";
+            color = GREEN;
+        } else if (p.isFixedNumber()) {
+            value = p.getValue().toString();
+            color = WHITE;
+        } else if (p.hasError()) {
+            value = p.getValue().toString();
+            color = RED;
+        } else {
+            value = p.getValue().toString();
+            color = BLUE;
+        }
+
+        return String.format("%s%" + cellWidth + "s%s", color, value, RESET);
+    }
+
 
     /*
     private void clearScreen() {

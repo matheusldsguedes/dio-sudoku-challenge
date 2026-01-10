@@ -22,8 +22,10 @@ public class SudokuService {
         if (position.isFixedNumber()) {
             throw new SudokuException("It is not possible to change a fixed position");
         }
+        position.setHasError(!validator.checkCorrectValue(row , column, number, board));
         position.setValue(number);
-        position.setHasError(validator.checkWrongValue(row , column, number, board));
+
+        System.out.println(position.hasError()); //testing
     }
     public void removeNumber(int row, int column, Board board){
 

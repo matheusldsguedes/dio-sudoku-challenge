@@ -50,7 +50,7 @@ public class Position {
         this.fixedNumber = fixedNumber;
     }
 
-    public boolean isHasError() {
+    public boolean hasError() {
         return hasError;
     }
 

@@ -24,7 +24,7 @@ public class SudokuValidator {
         }
     }
 
-    public boolean checkWrongValue(int row, int column, int value, Board board) {
+    public boolean checkCorrectValue(int row, int column, int value, Board board) {
         return !existsInRow(row, value, board)
                 && !existsInColumn(column, value, board)
                 && !existsInSection(row, column, value, board);
@@ -59,6 +59,7 @@ public class SudokuValidator {
         }
         return false;
     }
+
     public boolean isSudokuComplete(Board board) {
 
         int size = board.getGridValue();
