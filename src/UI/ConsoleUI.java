@@ -1,5 +1,6 @@
 package UI;
 
+import exception.SudokuException;
 import loader.SudokuFileLoader;
 import model.Board;
 import model.Position;
@@ -25,6 +26,13 @@ public class ConsoleUI {
 
         int option;
         do {
+            /*
+            *  Clearing the screen doesn't work in IntelliJ,
+            *  so I left it commented out because I haven't tested it yet
+            *  and I'll probably have to show the error after the incorrect action,
+            *  and only clear the screen after it corrects the action.
+            * */
+            //clearScreen();
             printBoard();
             printMenu();
 
@@ -44,13 +52,17 @@ public class ConsoleUI {
     }
 
     private void insertNumber() {
+        try{
+
         int row = readInt("On which line do you want to insert it? (1 a 9)")-1;
         int column = readInt("In which column do you want to insert it? (1 a 9)")-1;
         int value = readInt("What value do you want to enter? (1 a 9)");
 
-
         service.addNumber(row, column, value, board);
         System.out.println("Number successfully entered");
+        } catch (SudokuException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     private void removeNumber() {
@@ -60,7 +72,7 @@ public class ConsoleUI {
         try {
             service.removeNumber(row, column, board);
             System.out.println("Number removed.");
-        } catch (Exception e) {
+        } catch (SudokuException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
@@ -141,6 +153,13 @@ public class ConsoleUI {
         }
         System.out.println();
     }
+
+    /*
+    private void clearScreen() {
+       System.out.print("\033[H\033[2J");
+       System.out.flush();
+    }
+    */
 
     private void loadGame() {
         try {

@@ -1,5 +1,6 @@
 package validator;
 
+import exception.SudokuException;
 import model.Board;
 
 import java.util.HashSet;
@@ -11,13 +12,13 @@ public class SudokuValidator {
         int size = board.getGridValue();
 
         if (row < 0 || column < 0 || row >= size || column >= size) {
-            throw new IndexOutOfBoundsException("Row or column outside the range");
+            throw new SudokuException("Row or column outside the range");
         }
     }
 
     public void validateValue(int value, Board board) {
         if (value < 1 || value > board.getGridValue()) {
-            throw new IllegalArgumentException(
+            throw new SudokuException(
                     "The value must be between 1 and " + board.getGridValue()
             );
         }

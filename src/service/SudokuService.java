@@ -1,5 +1,6 @@
 package service;
 
+import exception.SudokuException;
 import model.Board;
 import model.Position;
 import validator.SudokuValidator;
@@ -18,8 +19,8 @@ public class SudokuService {
         validator.validatePosition(row, column, board);
         validator.validateValue(number, board);
         Position position = board.getPosition(row, column);
-        if(position.isFixedNumber()){
-            throw new IllegalStateException("It is not possible to change a fixed position");
+        if (position.isFixedNumber()) {
+            throw new SudokuException("It is not possible to change a fixed position");
         }
         position.setValue(number);
         position.setHasError(validator.checkWrongValue(row , column, number, board));
@@ -28,8 +29,8 @@ public class SudokuService {
 
         validator.validatePosition(row, column, board);
         Position position = board.getPosition(row, column);
-        if(position.isFixedNumber()){
-            throw new IllegalStateException("It is not possible to change a fixed position");
+        if (position.isFixedNumber()) {
+            throw new SudokuException("It is not possible to change a fixed position");
         }
         position.setValue(null);
     }
