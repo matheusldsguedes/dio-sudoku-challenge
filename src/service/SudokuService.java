@@ -25,7 +25,7 @@ public class SudokuService {
         position.setHasError(!validator.checkCorrectValue(row , column, number, board));
         position.setValue(number);
 
-        System.out.println(position.hasError()); //testing
+        //System.out.println(position.hasError()); //testing
     }
     public void removeNumber(int row, int column, Board board){
 
