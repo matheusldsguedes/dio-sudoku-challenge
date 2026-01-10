@@ -31,8 +31,11 @@ public class ConsoleUI {
             option = readInt("Choose an option:");
 
             switch (option) {
-                case 1 -> inserirNumero();
-                case 2 -> removerNumero();
+                case 1 -> insertNumber();
+                case 2 -> removeNumber();
+                case 3 -> {
+                    if(endGame()) option = 0;
+                }
                 case 0 -> System.out.println("Game over...");
                 default -> System.out.println("Invalid option.");
             }
@@ -40,17 +43,17 @@ public class ConsoleUI {
         } while (option != 0);
     }
 
-    private void inserirNumero() {
+    private void insertNumber() {
         int row = readInt("On which line do you want to insert it? (1 a 9)")-1;
         int column = readInt("In which column do you want to insert it? (1 a 9)")-1;
         int value = readInt("What value do you want to enter? (1 a 9)");
 
 
-        service.addNumber(value, row, column, board);
+        service.addNumber(row, column, value, board);
         System.out.println("Number successfully entered");
     }
 
-    private void removerNumero() {
+    private void removeNumber() {
         int row = readInt("Which line do you want to remove it from? (1 a 9)")-1;
         int column = readInt("Which column do you want to remove it from? (1 a 9)")-1;
 
@@ -73,48 +76,71 @@ public class ConsoleUI {
                 """);
     }
 
-    private int readInt(String mensagem) {
-        System.out.println(mensagem);
-        while (!scanner.hasNextInt()) {
-            System.out.println("Enter a valid number");
-            scanner.next();
+    private int readInt(String message) {
+        while (true) {
+            System.out.println(message);
+            try {
+                return Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Enter a valid number.");
+            }
         }
-        return scanner.nextInt();
     }
+
 
     private void printBoard() {
 
-        System.out.println();
+        int size = board.getGridValue();
+        int section = (int) Math.sqrt(size);
+
+        int cellWidth = String.valueOf(size).length() + 1;
+
         System.out.print("    ");
-        for (int col = 1; col <= 9; col++) {
-            System.out.print(col + " ");
-            if (col % 3 == 0 && col != 9) {
-                System.out.print("  ");
+        for (int col = 1; col <= size; col++) {
+            System.out.printf("%" + cellWidth + "d", col);
+            if (col % section == 0 && col != size) {
+                System.out.print(" ");
             }
         }
         System.out.println();
 
-        for (int i = 0; i < 9; i++) {
-            if (i % 3 == 0) {
-                System.out.println("  +-------+-------+-------+");
-            }
-            System.out.print((i + 1) + " | ");
+        printHorizontalSeparator(size, section, cellWidth);
 
-            for (int j = 0; j < 9; j++) {
+        for (int row = 0; row < size; row++) {
 
-                Position p = board.getPosition(i, j);
+            System.out.printf("%3d |", row + 1);
+
+            for (int col = 0; col < size; col++) {
+
+                Position p = board.getPosition(row, col);
                 String value = (p.getValue() == null) ? "." : p.getValue().toString();
-                System.out.print(value + " ");
 
-                if ((j + 1) % 3 == 0 && j != 8) {
-                    System.out.print("| ");
+                System.out.printf("%" + cellWidth + "s", value);
+
+                if ((col + 1) % section == 0) {
+                    System.out.print("|");
                 }
             }
-            System.out.println("|");
+            System.out.println();
+
+            if ((row + 1) % section == 0) {
+                printHorizontalSeparator(size, section, cellWidth);
+            }
         }
-        System.out.println("  +-------+-------+-------+");
     }
 
+    private void printHorizontalSeparator(int size, int section, int cellWidth) {
+
+        System.out.print("    +");
+
+        for (int i = 0; i < size; i++) {
+            System.out.print("-".repeat(cellWidth));
+            if ((i + 1) % section == 0) {
+                System.out.print("+");
+            }
+        }
+        System.out.println();
+    }
 
     private void loadGame() {
         try {
@@ -130,7 +156,19 @@ public class ConsoleUI {
             board = new SudokuFileLoader().startGame(conteudo, board.getGridValue());
 
         } catch (Exception e) {
-            throw new RuntimeException("Error loading the game.", e);
+            throw new RuntimeException("Error loading the game", e);
         }
     }
+    private boolean endGame() {
+        if (service.isGameFinished(board)) {
+            printBoard();
+            System.out.println("Sudoku successfully completed!");
+            return true;
+        } else {
+            System.out.println("The Sudoku puzzle is not correct yet");
+            return false;
+        }
+    }
+
+
 }
